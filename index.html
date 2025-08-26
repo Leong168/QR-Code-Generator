@@ -25,19 +25,36 @@
                 visibility: hidden;
             }
 
-            /* Make the label container and its children visible */
-            #label-container, #label-container * {
+            /* Make the printable area visible */
+            #printable-area, #printable-area * {
                 visibility: visible;
             }
 
-            /* Position the label at the top-left of the page */
-            #label-container {
+            /* Main container for the 2x2 grid */
+            #printable-area {
                 position: absolute;
                 left: 0;
                 top: 0;
-                /* Add a scale transform to make it fit a typical label size on an A4 sheet */
-                transform: scale(1.5);
-                transform-origin: top left;
+                width: 100%;
+                height: 100%;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr); /* Two columns */
+                grid-template-rows: repeat(2, 1fr);   /* Two rows */
+                gap: 0; /* Removed gap for seamless grid */
+                justify-items: center;
+                align-items: center;
+                padding: 0; /* Removed padding */
+            }
+
+            /* Override the label container's dimensions for printing */
+            .label-container {
+                width: 100%;
+                height: 100%;
+            }
+
+            /* Ensure input fields are hidden in print view */
+            .input-section {
+                display: none;
             }
         }
     </style>
@@ -49,72 +66,102 @@
         <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Custom QR Label Creator</h1>
 
         <!-- Input and control area -->
-        <div class="space-y-4">
-            <!-- Product Name Input -->
-            <div>
-                <label for="product-input" class="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
-                <input type="text" id="product-input" value="SS X110 WiFi 4/64GB B (GRP)" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+        <div class="space-y-8 input-section">
+            <!-- Input group for each label -->
+            <div id="input-group-1" class="space-y-2 border-b-2 pb-4">
+                <h2 class="text-xl font-semibold text-gray-700">Label 1</h2>
+                <div>
+                    <label for="product-input-1" class="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
+                    <input type="text" id="product-input-1" value="SS X110 WiFi 4/64GB B (GRP)" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="location-input-1" class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                    <input type="text" id="location-input-1" value="A12" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="number-input-1" class="block text-sm font-medium text-gray-700 mb-1">Number</label>
+                    <input type="text" id="number-input-1" value="4746" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="qr-data-input-1" class="block text-sm font-medium text-gray-700 mb-1">QR Code Data (Text or URL)</label>
+                    <input type="text" id="qr-data-input-1" value="https://example.com/item1" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+            </div>
+
+            <div id="input-group-2" class="space-y-2 border-b-2 pb-4">
+                <h2 class="text-xl font-semibold text-gray-700">Label 2</h2>
+                <div>
+                    <label for="product-input-2" class="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
+                    <input type="text" id="product-input-2" value="Product B" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="location-input-2" class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                    <input type="text" id="location-input-2" value="B34" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="number-input-2" class="block text-sm font-medium text-gray-700 mb-1">Number</label>
+                    <input type="text" id="number-input-2" value="5123" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="qr-data-input-2" class="block text-sm font-medium text-gray-700 mb-1">QR Code Data (Text or URL)</label>
+                    <input type="text" id="qr-data-input-2" value="https://example.com/item2" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+            </div>
+
+            <div id="input-group-3" class="space-y-2 border-b-2 pb-4">
+                <h2 class="text-xl font-semibold text-gray-700">Label 3</h2>
+                <div>
+                    <label for="product-input-3" class="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
+                    <input type="text" id="product-input-3" value="Product C" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="location-input-3" class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                    <input type="text" id="location-input-3" value="C56" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="number-input-3" class="block text-sm font-medium text-gray-700 mb-1">Number</label>
+                    <input type="text" id="number-input-3" value="6789" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="qr-data-input-3" class="block text-sm font-medium text-gray-700 mb-1">QR Code Data (Text or URL)</label>
+                    <input type="text" id="qr-data-input-3" value="https://example.com/item3" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+            </div>
+
+            <div id="input-group-4" class="space-y-2">
+                <h2 class="text-xl font-semibold text-gray-700">Label 4</h2>
+                <div>
+                    <label for="product-input-4" class="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
+                    <input type="text" id="product-input-4" value="Product D" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="location-input-4" class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                    <input type="text" id="location-input-4" value="D78" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="number-input-4" class="block text-sm font-medium text-gray-700 mb-1">Number</label>
+                    <input type="text" id="number-input-4" value="9012" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="qr-data-input-4" class="block text-sm font-medium text-gray-700 mb-1">QR Code Data (Text or URL)</label>
+                    <input type="text" id="qr-data-input-4" value="https://example.com/item4" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
             </div>
             
-            <!-- Location Input -->
-            <div>
-                <label for="location-input" class="block text-sm font-medium text-gray-700 mb-1">Location</label>
-                <input type="text" id="location-input" value="A12" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-            </div>
-
-            <!-- Number Input -->
-            <div>
-                <label for="number-input" class="block text-sm font-medium text-gray-700 mb-1">Number</label>
-                <input type="text" id="number-input" value="4746" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-            </div>
-
-            <!-- QR Code Data Input -->
-            <div>
-                <label for="qr-data-input" class="block text-sm font-medium text-gray-700 mb-1">QR Code Data (Text or URL)</label>
-                <input type="text" id="qr-data-input" value="https://example.com" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-            </div>
-
             <!-- Buttons -->
             <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 pt-4">
                 <button id="generate-button" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-200 ease-in-out transform hover:scale-105">
-                    Generate Label
+                    Generate All Labels
                 </button>
                 <button id="print-button" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-200 ease-in-out transform hover:scale-105">
-                    Print Label
+                    Print All Labels
                 </button>
             </div>
         </div>
 
         <!-- The printable label section -->
-        <div id="label-container" class="mt-8 hidden w-[300px] h-[350px] border-2 border-black bg-[#ff8c00] text-black rounded-lg overflow-hidden">
-            <!-- Top section for product name with 60% height -->
-            <div id="product-display" class="w-full h-[60%] p-8 flex items-center justify-center text-center font-bold text-4xl">
-                <!-- Content will be updated by JavaScript -->
-            </div>
-            
-            <!-- Horizontal separator line -->
-            <div class="h-0 border-b-2 border-black"></div>
-
-            <!-- Middle section for location -->
-            <div id="location-display" class="w-full h-[10%] p-2 flex items-center justify-center text-center font-bold text-lg">
-                <!-- Content will be updated by JavaScript -->
-            </div>
-
-            <!-- Horizontal separator line -->
-            <div class="h-0 border-b-2 border-black"></div>
-
-            <!-- Bottom section for number and QR code -->
-            <div class="w-full h-[30%] flex">
-                <!-- Left section for the number -->
-                <div id="number-display" class="w-1/2 p-4 flex items-center justify-center font-bold text-5xl">
-                    <!-- Content will be updated by JavaScript -->
-                </div>
-
-                <!-- Vertical separator line -->
-                <div id="qrcode-display" class="w-1/2 p-4 flex items-center justify-center">
-                    <!-- The QR code will be generated here -->
-                </div>
-            </div>
+        <div id="printable-area" class="mt-8 hidden">
+            <!-- Labels will be dynamically generated and appended here -->
         </div>
     </div>
 
@@ -122,36 +169,55 @@
         // Get references to all the HTML elements
         const generateButton = document.getElementById('generate-button');
         const printButton = document.getElementById('print-button');
-        const labelContainer = document.getElementById('label-container');
-        const productInput = document.getElementById('product-input');
-        const locationInput = document.getElementById('location-input');
-        const numberInput = document.getElementById('number-input');
-        const qrDataInput = document.getElementById('qr-data-input');
-        const productDisplay = document.getElementById('product-display');
-        const locationDisplay = document.getElementById('location-display');
-        const numberDisplay = document.getElementById('number-display');
-        const qrcodeDisplay = document.getElementById('qrcode-display');
+        const printableArea = document.getElementById('printable-area');
 
-        // Function to generate the QR code and update the label
-        function generateLabel() {
-            // Get values from the input fields
-            const product = productInput.value;
-            const location = locationInput.value;
-            const number = numberInput.value;
-            const qrData = qrDataInput.value;
+        // Function to generate the QR code and update a single label
+        function generateSingleLabel(labelId, product, location, number, qrData) {
+            // Create a new label container
+            const labelContainer = document.createElement('div');
+            labelContainer.classList.add('label-container', 'w-[300px]', 'h-[350px]', 'border-2', 'border-black', 'bg-[#ff8c00]', 'text-black', 'rounded-lg', 'overflow-hidden');
+            
+            // Construct the inner HTML for the label
+            labelContainer.innerHTML = `
+                <!-- Top section for product name with 60% height -->
+                <div id="product-display-${labelId}" class="w-full h-[60%] p-8 flex items-center justify-center text-center font-bold text-4xl">
+                    ${product}
+                </div>
+                
+                <!-- Horizontal separator line -->
+                <div class="h-0 border-b-2 border-black"></div>
 
-            // Update the display elements with the input values
-            productDisplay.innerText = product;
-            locationDisplay.innerText = location;
-            numberDisplay.innerText = number;
+                <!-- Middle section for location -->
+                <div id="location-display-${labelId}" class="w-full h-[10%] p-2 flex items-center justify-center text-center font-bold text-lg">
+                    ${location}
+                </div>
 
-            // Clear any previous QR code
-            qrcodeDisplay.innerHTML = '';
+                <!-- Horizontal separator line -->
+                <div class="h-0 border-b-2 border-black"></div>
 
-            // Check if there is data to create a QR code
+                <!-- Bottom section for number and QR code -->
+                <div class="w-full h-[30%] flex">
+                    <!-- Left section for the number -->
+                    <div id="number-display-${labelId}" class="w-1/2 p-4 flex items-center justify-center font-bold text-5xl">
+                        ${number}
+                    </div>
+
+                    <!-- Vertical separator line -->
+                    <div class="w-0 border-r-2 border-black"></div>
+
+                    <!-- Right section for the QR code -->
+                    <div id="qrcode-display-${labelId}" class="w-1/2 p-4 flex items-center justify-center">
+                        <!-- QR code will be generated here -->
+                    </div>
+                </div>
+            `;
+
+            // Append the new label to the printable area
+            printableArea.appendChild(labelContainer);
+
+            // Generate the QR code after the element is in the DOM
+            const qrcodeDisplay = labelContainer.querySelector(`#qrcode-display-${labelId}`);
             if (qrData) {
-                // Generate the QR code using the QRCode.js library
-                // The library will append a canvas or img tag to the specified div
                 new QRCode(qrcodeDisplay, {
                     text: qrData,
                     width: 92,
@@ -161,13 +227,29 @@
                     correctLevel: QRCode.CorrectLevel.H // High error correction
                 });
             }
+        }
 
-            // Show the label container
-            labelContainer.classList.remove('hidden');
+        // Function to generate all four labels
+        function generateAllLabels() {
+            // Clear any previous labels
+            printableArea.innerHTML = '';
+
+            // Loop through each label group and generate a label
+            for (let i = 1; i <= 4; i++) {
+                const product = document.getElementById(`product-input-${i}`).value;
+                const location = document.getElementById(`location-input-${i}`).value;
+                const number = document.getElementById(`number-input-${i}`).value;
+                const qrData = document.getElementById(`qr-data-input-${i}`).value;
+                
+                generateSingleLabel(i, product, location, number, qrData);
+            }
+
+            // Show the printable area
+            printableArea.classList.remove('hidden');
         }
 
         // Add a click event listener to the generate button
-        generateButton.addEventListener('click', generateLabel);
+        generateButton.addEventListener('click', generateAllLabels);
 
         // Add a click event listener to the print button
         printButton.addEventListener('click', () => {
@@ -176,8 +258,8 @@
             window.print();
         });
 
-        // Generate the label on initial page load with default values
-        generateLabel();
+        // Generate all labels on initial page load with default values
+        generateAllLabels();
     </script>
 
 </body>
