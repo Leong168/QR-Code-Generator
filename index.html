@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Label Generator</title>
+    <!-- Use Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Use Google Fonts for the Inter font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <!-- QR Code generation library -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <style>
+        /* General body styling */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Print-specific CSS to hide everything except the label */
+        @media print {
+            /* Hide all elements on the page */
+            body * {
+                visibility: hidden;
+            }
+
+            /* Make the label container and its children visible */
+            #label-container, #label-container * {
+                visibility: visible;
+            }
+
+            /* Position the label at the top-left of the page */
+            #label-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                /* Add a scale transform to make it fit a typical label size on an A4 sheet */
+                transform: scale(1.5);
+                transform-origin: top left;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <!-- Main application container -->
+    <div class="bg-white p-8 rounded-2xl shadow-xl max-w-lg w-full">
+        <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Custom QR Label Creator</h1>
+
+        <!-- Input and control area -->
+        <div class="space-y-4">
+            <!-- Product Name Input -->
+            <div>
+                <label for="product-input" class="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
+                <input type="text" id="product-input" value="SS X110 WiFi 4/64GB B (GRP)" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            
+            <!-- Location Input -->
+            <div>
+                <label for="location-input" class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                <input type="text" id="location-input" value="A12" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <!-- Number Input -->
+            <div>
+                <label for="number-input" class="block text-sm font-medium text-gray-700 mb-1">Number</label>
+                <input type="text" id="number-input" value="4746" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <!-- QR Code Data Input -->
+            <div>
+                <label for="qr-data-input" class="block text-sm font-medium text-gray-700 mb-1">QR Code Data (Text or URL)</label>
+                <input type="text" id="qr-data-input" value="https://example.com" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 pt-4">
+                <button id="generate-button" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-200 ease-in-out transform hover:scale-105">
+                    Generate Label
+                </button>
+                <button id="print-button" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-200 ease-in-out transform hover:scale-105">
+                    Print Label
+                </button>
+            </div>
+        </div>
+
+        <!-- The printable label section -->
+        <div id="label-container" class="mt-8 hidden w-[300px] h-[350px] border-2 border-black bg-[#ff8c00] text-black rounded-lg overflow-hidden">
+            <!-- Top section for product name with 60% height -->
+            <div id="product-display" class="w-full h-[60%] p-8 flex items-center justify-center text-center font-bold text-4xl">
+                <!-- Content will be updated by JavaScript -->
+            </div>
+            
+            <!-- Horizontal separator line -->
+            <div class="h-0 border-b-2 border-black"></div>
+
+            <!-- Middle section for location -->
+            <div id="location-display" class="w-full h-[10%] p-2 flex items-center justify-center text-center font-bold text-lg">
+                <!-- Content will be updated by JavaScript -->
+            </div>
+
+            <!-- Horizontal separator line -->
+            <div class="h-0 border-b-2 border-black"></div>
+
+            <!-- Bottom section for number and QR code -->
+            <div class="w-full h-[30%] flex">
+                <!-- Left section for the number -->
+                <div id="number-display" class="w-1/2 p-4 flex items-center justify-center font-bold text-5xl">
+                    <!-- Content will be updated by JavaScript -->
+                </div>
+
+                <!-- Vertical separator line -->
+                <div id="qrcode-display" class="w-1/2 p-4 flex items-center justify-center">
+                    <!-- The QR code will be generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get references to all the HTML elements
+        const generateButton = document.getElementById('generate-button');
+        const printButton = document.getElementById('print-button');
+        const labelContainer = document.getElementById('label-container');
+        const productInput = document.getElementById('product-input');
+        const locationInput = document.getElementById('location-input');
+        const numberInput = document.getElementById('number-input');
+        const qrDataInput = document.getElementById('qr-data-input');
+        const productDisplay = document.getElementById('product-display');
+        const locationDisplay = document.getElementById('location-display');
+        const numberDisplay = document.getElementById('number-display');
+        const qrcodeDisplay = document.getElementById('qrcode-display');
+
+        // Function to generate the QR code and update the label
+        function generateLabel() {
+            // Get values from the input fields
+            const product = productInput.value;
+            const location = locationInput.value;
+            const number = numberInput.value;
+            const qrData = qrDataInput.value;
+
+            // Update the display elements with the input values
+            productDisplay.innerText = product;
+            locationDisplay.innerText = location;
+            numberDisplay.innerText = number;
+
+            // Clear any previous QR code
+            qrcodeDisplay.innerHTML = '';
+
+            // Check if there is data to create a QR code
+            if (qrData) {
+                // Generate the QR code using the QRCode.js library
+                // The library will append a canvas or img tag to the specified div
+                new QRCode(qrcodeDisplay, {
+                    text: qrData,
+                    width: 92,
+                    height: 92,
+                    colorDark: "#000000",
+                    colorLight: "#ff8c00",
+                    correctLevel: QRCode.CorrectLevel.H // High error correction
+                });
+            }
+
+            // Show the label container
+            labelContainer.classList.remove('hidden');
+        }
+
+        // Add a click event listener to the generate button
+        generateButton.addEventListener('click', generateLabel);
+
+        // Add a click event listener to the print button
+        printButton.addEventListener('click', () => {
+            // This will trigger the browser's print dialog
+            // The CSS @media print query will handle hiding non-label elements
+            window.print();
+        });
+
+        // Generate the label on initial page load with default values
+        generateLabel();
+    </script>
+
+</body>
+</html>
