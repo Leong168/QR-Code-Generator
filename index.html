@@ -82,10 +82,6 @@
                     <label for="number-input-1" class="block text-sm font-medium text-gray-700 mb-1">Number</label>
                     <input type="text" id="number-input-1" value="4746" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 </div>
-                <div>
-                    <label for="qr-data-input-1" class="block text-sm font-medium text-gray-700 mb-1">QR Code Data (Text or URL)</label>
-                    <input type="text" id="qr-data-input-1" value="https://example.com/item1" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                </div>
             </div>
 
             <div id="input-group-2" class="space-y-2 border-b-2 pb-4">
@@ -101,10 +97,6 @@
                 <div>
                     <label for="number-input-2" class="block text-sm font-medium text-gray-700 mb-1">Number</label>
                     <input type="text" id="number-input-2" value="5123" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div>
-                    <label for="qr-data-input-2" class="block text-sm font-medium text-gray-700 mb-1">QR Code Data (Text or URL)</label>
-                    <input type="text" id="qr-data-input-2" value="https://example.com/item2" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 </div>
             </div>
 
@@ -122,10 +114,6 @@
                     <label for="number-input-3" class="block text-sm font-medium text-gray-700 mb-1">Number</label>
                     <input type="text" id="number-input-3" value="6789" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 </div>
-                <div>
-                    <label for="qr-data-input-3" class="block text-sm font-medium text-gray-700 mb-1">QR Code Data (Text or URL)</label>
-                    <input type="text" id="qr-data-input-3" value="https://example.com/item3" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                </div>
             </div>
 
             <div id="input-group-4" class="space-y-2">
@@ -141,10 +129,6 @@
                 <div>
                     <label for="number-input-4" class="block text-sm font-medium text-gray-700 mb-1">Number</label>
                     <input type="text" id="number-input-4" value="9012" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                </div>
-                <div>
-                    <label for="qr-data-input-4" class="block text-sm font-medium text-gray-700 mb-1">QR Code Data (Text or URL)</label>
-                    <input type="text" id="qr-data-input-4" value="https://example.com/item4" class="mt-1 block w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 </div>
             </div>
             
@@ -239,8 +223,10 @@
                 const product = document.getElementById(`product-input-${i}`).value;
                 const location = document.getElementById(`location-input-${i}`).value;
                 const number = document.getElementById(`number-input-${i}`).value;
-                const qrData = document.getElementById(`qr-data-input-${i}`).value;
                 
+                // Use the product name as the data for the QR code
+                const qrData = product; 
+
                 generateSingleLabel(i, product, location, number, qrData);
             }
 
